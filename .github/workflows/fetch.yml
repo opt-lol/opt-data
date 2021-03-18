@@ -1,0 +1,20 @@
+name: Fetch data
+on:
+    schedule:
+        - cron: "* */4 * * *"
+
+jobs:
+    fetch:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - run: |
+                  wget $(curl --silent "https://api.github.com/repos/opt-lol/opt-scraper/releases/latest" | jq -r '.assets[0].browser_download_url')
+                  ./opt-scraper
+              name: Fetch data
+            - run: |
+                  git config user.name github-actions
+                  git config user.email github-actions@github.com
+                  git add data
+                  git commit -m $(date -u +"Fetched at %Y-%m-%dT%H:%M:%SZ")
+                  git push
