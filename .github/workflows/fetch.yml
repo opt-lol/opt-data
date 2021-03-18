@@ -11,6 +11,7 @@ jobs:
             - uses: actions/checkout@v2
             - run: |
                   wget $(curl --silent "https://api.github.com/repos/opt-lol/opt-scraper/releases/latest" | jq -r '.assets[0].browser_download_url')
+                  chmod +x opt-scraper
                   ./opt-scraper
               name: Fetch data
             - run: |
